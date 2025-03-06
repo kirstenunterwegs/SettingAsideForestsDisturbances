@@ -199,7 +199,6 @@ matches.subclass <- matches.subclass %>% group_by(n) %>% count()
 names(matches.subclass) <- c("number.matches", "number of sublandscapes")
 
 # 1-Many, 15% variation, inital n = 30 (with forest type matching)
-
 # number.matches `number of sublandscapes`
 
             #  1                        14
@@ -212,7 +211,7 @@ names(matches.subclass) <- c("number.matches", "number of sublandscapes")
             #  8                        14
             #  9                         5
             # 10                        10
-
+# often we do not find 10 landscape with some distance to themselves which are sufficiently similar to the set aside landscape
 
 saveRDS(matches.final.df, "data/processed/matching/match.df.1oMany_15perc_n30_filtered.rds") # store in match setup folder for disturbance extraction
 
