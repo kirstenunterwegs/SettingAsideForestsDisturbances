@@ -20,7 +20,7 @@ setwd("~/data/")
 
 
 # always switch to the respective severity cutoff point! If not specified with 0.7 and 0.9,
-# teh default cutoff (also used in this study) is 0.8
+# the default cutoff (also used in this study) is 0.8
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # --- create natural disturbances stack for disturbance extraction
