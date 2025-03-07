@@ -37,80 +37,80 @@ setwd("~/data/")
 
 # run this code ones to prepare modelling data frames:
 
-# years <- 1986:2020
-# 
-# # preclassification of years to assign pulse and background years
-# dist_year_class <- read.csv("data/processed/disturbances/germany/pulse_background_classification_natural.dist.csv")
-# 
-# matches <- c("1o1_forest", "1oMany_forest")
-# 
-# 
-# for (i in matches) {
-# 
-#   # load matching df
-#   dist.df <-readRDS(paste0("data/processed/dist.extraction/",i,"/match.df_climate_dist.rds"))
-# 
-#   # process the dataframe:
-# 
-#   filtered_data <- dist.df %>%
-# 
-#     # create column with number of not disturbed cells
-#     mutate(across(.cols = paste0("disturbed.cells.", years),
-#                   ~ n.fcover - .,  # substract disturbed cells from all forested cells in landscape to get not disturbed cells
-#                   .names = "no.{.col}")) %>%
-# 
-#     # calculate high severity rate
-#     rowwise() %>%
-#     mutate(
-#       total_disturbed_cells = sum(c_across(starts_with("disturbed.cells"))),
-#       total_high_severity = sum(c_across(starts_with("severe.disturbed.cells"))),
-#       #dist.rate = ((total_disturbed_cells / n.fcover) / 35), # annual disturbance rate
-#       high.severity.rate = total_high_severity / total_disturbed_cells,
-#     ) %>%
-#     ungroup()  # Important to remove the row wise grouping after operations
-# 
-# 
-#    # Filter the dataframe to include only the desired columns, depending on matching scheme
-#       filtered_data <- filtered_data %>% select(paste0("disturbed.cells.", years), paste0("no.disturbed.cells.", years),
-#            high.severity.rate, density, frequency, max.patch, mean.patch,
-#            Research, subclass, n.fcover, sitecond, ftype1:ftype8)
-# 
-# 
-#   # First, gather the disturbed.cells columns
-#   gathered_disturbed <- filtered_data %>%
-#     pivot_longer(
-#       cols = starts_with("disturbed.cells."),
-#       names_to = "year",
-#       names_prefix = "disturbed.cells.",
-#       values_to = "dist.cells"
-#     ) %>%
-#     select(-starts_with("no.disturbed.cells."))
-# 
-#   # Then, gather the no.disturbed.cells columns
-#   gathered_no_disturbed <- filtered_data %>%
-#     pivot_longer(
-#       cols = starts_with("no.disturbed.cells."),
-#       names_to = "year",
-#       names_prefix = "no.disturbed.cells.",
-#       values_to = "no.dist"
-#     ) %>%
-#     select(-starts_with("disturbed.cells."))
-# 
-#   # combine both
-#   gathered_data_long <- gathered_disturbed
-#   gathered_data_long$no.dist <-  gathered_no_disturbed$no.dist
-# 
-# 
-#   # add pulse year information
-#   gathered_data_long <- merge(gathered_data_long, dist_year_class[ , c("class", "value")],
-#                              by.x= "year", by.y="value", all.x=T)
-#   gathered_data_long$class <- as.factor(gathered_data_long$class)
-# 
-# 
-#   # write modelling df to file
-#   saveRDS(gathered_data_long, paste0("data/processed/dist.extraction/",i,"/modelling.df_long.rds"))
-# 
-# }
+years <- 1986:2020
+
+# preclassification of years to assign pulse and background years
+dist_year_class <- read.csv("data/processed/disturbances/germany/pulse_background_classification_natural.dist.csv")
+
+matches <- c("1o1_forest", "1oMany_forest")
+
+
+for (i in matches) {
+
+  # load matching df
+  dist.df <-readRDS(paste0("data/processed/dist.extraction/",i,"/match.df_climate_dist.rds"))
+
+  # process the dataframe:
+
+  filtered_data <- dist.df %>%
+
+    # create column with number of not disturbed cells
+    mutate(across(.cols = paste0("disturbed.cells.", years),
+                  ~ n.fcover - .,  # substract disturbed cells from all forested cells in landscape to get not disturbed cells
+                  .names = "no.{.col}")) %>%
+
+    # calculate high severity rate
+    rowwise() %>%
+    mutate(
+      total_disturbed_cells = sum(c_across(starts_with("disturbed.cells"))),
+      total_high_severity = sum(c_across(starts_with("severe.disturbed.cells"))),
+      #dist.rate = ((total_disturbed_cells / n.fcover) / 35), # annual disturbance rate
+      high.severity.rate = total_high_severity / total_disturbed_cells,
+    ) %>%
+    ungroup()  # Important to remove the row wise grouping after operations
+
+
+   # Filter the dataframe to include only the desired columns, depending on matching scheme
+      filtered_data <- filtered_data %>% select(paste0("disturbed.cells.", years), paste0("no.disturbed.cells.", years),
+           high.severity.rate, density, frequency, max.patch, mean.patch,
+           Research, subclass, n.fcover, sitecond, ftype1:ftype8)
+
+
+  # First, gather the disturbed.cells columns
+  gathered_disturbed <- filtered_data %>%
+    pivot_longer(
+      cols = starts_with("disturbed.cells."),
+      names_to = "year",
+      names_prefix = "disturbed.cells.",
+      values_to = "dist.cells"
+    ) %>%
+    select(-starts_with("no.disturbed.cells."))
+
+  # Then, gather the no.disturbed.cells columns
+  gathered_no_disturbed <- filtered_data %>%
+    pivot_longer(
+      cols = starts_with("no.disturbed.cells."),
+      names_to = "year",
+      names_prefix = "no.disturbed.cells.",
+      values_to = "no.dist"
+    ) %>%
+    select(-starts_with("disturbed.cells."))
+
+  # combine both
+  gathered_data_long <- gathered_disturbed
+  gathered_data_long$no.dist <-  gathered_no_disturbed$no.dist
+
+
+  # add pulse year information
+  gathered_data_long <- merge(gathered_data_long, dist_year_class[ , c("class", "value")],
+                             by.x= "year", by.y="value", all.x=T)
+  gathered_data_long$class <- as.factor(gathered_data_long$class)
+
+
+  # write modelling df to file
+  saveRDS(gathered_data_long, paste0("data/processed/dist.extraction/",i,"/modelling.df_long.rds"))
+
+}
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # summarize hectar of forest per treatment
@@ -692,7 +692,7 @@ pdist <- ggplot(dist.df_1o1f_long_nona, aes(x=Research, y=dist.rate, fill=Resear
   My_Theme 
 pdist
 
-ggsave("data/results/plots/effect_man_unman_dist.rate_0excluded.tiff", pdist, width = 20, height = 15) 
+#ggsave("data/results/plots/effect_dist.rate_0excluded.tiff", pdist, width = 20, height = 15) 
 
 
 # --- Frequency ---
@@ -756,8 +756,7 @@ pfreq <- ggplot(dist.df_1o1f_long.sub, aes(x=Research, y=frequency, fill=Researc
 pfreq
 
 
-
-ggsave("data/results/model_checks/effect_man_unman_frequency_1o1_with_obs.tiff", pfreq, width = 20, height = 15) 
+#ggsave("data/results/model_checks/effect_frequency_1o1_with_obs.tiff", pfreq, width = 20, height = 15) 
 
 
 # --- Density ---
@@ -809,7 +808,7 @@ pdens <- ggplot(dist.df_1o1f_long.sub, aes(x=Research, y=density, fill=Research)
 pdens
 
 
-ggsave("data/results/model_checks/effect_man_unman_density_1o1f_with_obs.tiff", pdens, width = 20, height = 15) 
+#ggsave("data/results/model_checks/effect_density_1o1f_with_obs.tiff", pdens, width = 20, height = 15) 
 
 
 # --- patch size ---
@@ -919,7 +918,7 @@ psev <- ggplot(dist.df_1o1f_long.sub.dist, aes(x=Research, y=high.severity.rate.
   My_Theme 
 psev
 
-ggsave("data/results/model_checks/effect_man_unman_severity_1o1f_with_obs.tiff", psev, width = 20, height = 15) 
+#ggsave("data/results/model_checks/effect_severity_1o1f_with_obs.tiff", psev, width = 20, height = 15) 
 
 
 
@@ -1243,7 +1242,7 @@ for (i in 1:n_bootstrap) {
 }
 
 saveRDS(estimates_df, "data/processed/modelling/sim.estimates.pulse.back_df.rds")
-estimates_df <- readRDS("data/processed/modelling/sim.estimates.pulse.back_df.rds" )
+#estimates_df <- readRDS("data/processed/modelling/sim.estimates.pulse.back_df.rds" )
 
 # Plot the distributions of the estimates
 ggplot(estimates_df, aes(x = Estimate, fill = coeffs)) +
@@ -1317,7 +1316,7 @@ p1 <- ggplot(parameter_df.inv.long, aes(x = year.type, y= value, fill = treatmen
 p1
 
 
-ggsave("data/results/plots/bootstrap_estimates_eff_pulse_back.tiff", p1, width = 20, height = 15) 
+#ggsave("data/results/plots/bootstrap_estimates_eff_pulse_back.tiff", p1, width = 20, height = 15) 
 
 
 # timeline plot of disturbance rates 
@@ -1541,13 +1540,13 @@ ecoreg_df[rows_to_modify, cols_to_check] <- NA
 saveRDS(ecoreg_df, "data/processed/modelling/effects_ecoregion.rds")
 
 #load ecoregion
-wgb <- vect("data/processed/environmental_data_all_natforest/wuchsgebiete_dissolved_counts.gpkg")
+wgb <- vect("data/processed/site_cond/wuchsgebiete_dissolved_counts.gpkg")
 
 # merge with effects df
 wgb.effect <- merge(wgb, ecoreg_df, by.x = "wg_bu", by.y = "ecoregion", all.x=T)
 
 # store ecoregion with management effect
-writeVector(wgb.effect, "data/processed/environmental_data_all_natforest/wuchsgebiete_dissolved_counts_effects_1o1.gpkg")
+writeVector(wgb.effect, "data/processed/modelling/wuchsgebiete_dissolved_counts_effects_1o1.gpkg")
 
 
 

@@ -566,8 +566,6 @@ names(window.df) <- c("newID", "window")
 saveRDS(window.df, "data/processed/focal/window.df.rds") # stores focal window size per set aside area to secure aggregation of minimum 20 ha forest
 writeRaster(setaside_n.fcover, "data/processed/focal/setaside_n.fcover_focal.tif", overwrite=T)
 
-window.df <- readRDS("data/processed/focal/window.df.rds")
-
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -606,7 +604,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside_elev.mean, "data/processed/focal/setaside.elev.mean_focal.tif")
+#writeRaster(setaside_elev.mean, "data/processed/focal/setaside.elev.mean_focal.tif")
 
 
 # --- slope
@@ -640,7 +638,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.slope.mean, "data/processed/focal/setaside.slope.mean_focal.tif")
+#writeRaster(setaside.slope.mean, "data/processed/focal/setaside.slope.mean_focal.tif")
 
 
 # --- North-Westerness
@@ -674,7 +672,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.north.west.most, "data/processed/focal/setaside.north.west.most_focal.tif")
+#writeRaster(setaside.north.west.most, "data/processed/focal/setaside.north.west.most_focal.tif")
 
 
 # --- sitecondition
@@ -708,7 +706,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.sidecond, "data/processed/focal/setaside.sitecond.focal.tif")
+#writeRaster(setaside.sidecond, "data/processed/focal/setaside.sitecond.focal.tif")
 
 
 
@@ -745,7 +743,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share1, "data/processed/focal/setaside.share1.tif")
+#writeRaster(setaside.share1, "data/processed/focal/setaside.share1.tif")
 
 #2
 
@@ -778,7 +776,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share2, "data/processed/focal/setaside.share2.tif")
+#writeRaster(setaside.share2, "data/processed/focal/setaside.share2.tif")
 
 #3
 
@@ -811,7 +809,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share3, "data/processed/focal/setaside.share3.tif")
+#writeRaster(setaside.share3, "data/processed/focal/setaside.share3.tif")
 
 #4
 
@@ -844,7 +842,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share4, "data/processed/focal/setaside.share4.tif")
+#writeRaster(setaside.share4, "data/processed/focal/setaside.share4.tif")
 
 #5
 
@@ -877,7 +875,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share5, "data/processed/focal/setaside.share5.tif")
+#writeRaster(setaside.share5, "data/processed/focal/setaside.share5.tif")
 
 #6
 
@@ -910,7 +908,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share6, "data/processed/focal/setaside.share6.tif")
+#writeRaster(setaside.share6, "data/processed/focal/setaside.share6.tif")
 
 #7
 
@@ -943,7 +941,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share7, "data/processed/focal/setaside.share7.tif")
+#writeRaster(setaside.share7, "data/processed/focal/setaside.share7.tif")
 
 #8
 
@@ -976,7 +974,7 @@ for (i in setaside$newID) {
   
 }
 
-writeRaster(setaside.share8, "data/processed/focal/setaside.share8.tif")
+#writeRaster(setaside.share8, "data/processed/focal/setaside.share8.tif")
 
 
 

@@ -59,42 +59,15 @@ anomaly_plot <- ggplot2::ggplot(year_counts, ggplot2::aes(x=value, y=anomaly)) +
 
 ggsave("data/results/plots/anomaly_years.tiff", anomaly_plot, width = 20, height = 15,limitsize = FALSE) # Adjust dimensions as needed
 
-### ----- all disturbances -----
 
-
-# load all (natural) disturbances for Germany
-
-dist <- rast("data/raw/disturbances/germany/disturbance_year_1986-2020_germany_25832.tiff")
-
-# calculate area disturbed per year
-
-year_counts <- freq(dist)
-
-# calculate baseline disturbance rate for the whole time period
-
-year_counts$disturbance_ha <- year_counts$count*0.09
-
-# calculate average distrubances over whole period
-
-year_counts$mean_ref <- mean(year_counts$disturbance_ha) 
-
-# calculate the divergence of annual area disturbed from the reference baseline 
-
-year_counts$anomaly <- year_counts$disturbance_ha / year_counts$mean_ref -1 
-
-year_counts$class <- ifelse(year_counts$anomaly > 1, "pulse", "background")
-
-write.csv(year_counts, "data/processed/disturbances/germany/pulse_background_classification_all.dist.csv")
-
-# -------------------------------------------------------------------------------
 # get vector of years as reference
 reference_period <- 1986:2015
 drought_period   <- 2018:2020
 
 
 # Calculate anomalies
-out.df2 <-
-  out.df %>%
+year_counts2 <-
+  year_counts %>%
   group_by(gridindex) %>%
   filter(sum(disturbance_ha) > 35) %>% # Exclude areas with less than 1 ha/yr of disturbances on average
   filter(sum(disturbance_ha[year %in% reference_period]) > 30) %>% # Exclude areas with less than 1 ha/yr of disturbances on average

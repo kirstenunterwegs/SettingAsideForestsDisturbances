@@ -98,11 +98,12 @@ for (i in 1:length(years)){ # loop takes a while!
 
 rm(list = ls()) # empty RAM
 
+#% !!!!!!!!!!!!!!
 # Use the patch ID information in the extraction, to calculate the size of the patch within the sublandscape
-# You can use the patch_size layers in teh extraction process to extract the complete patch size, also when it exceeds the sublandscape
+# You can use the patch_size layers in the extraction process to extract the complete patch size, also when it exceeds the sublandscape
 
 # We decided to stick to the patch size WITHIN the landscape (so using the patch_n_ layers)
-
+#% !!!!!!!!!!!!!!
 
 # -----
 
@@ -116,17 +117,17 @@ folder <- "1o1_forest" # change folder to respective matching setup
 
 # load annual layers and mask them to managed and set aside forest area
 
-# Get a list of all .rds files in the folder
-raster_files <- list.files(paste0("data/processed/disturbances/patch_size/", folder,"/years_patch/"), all.files =TRUE, full.names = TRUE)
-# Remove the first two paths
-raster_files <- raster_files[-c(1, 2)]
-
-# Read all rasters and stack them
-stack <- lapply(raster_files, terra::rast)
-
-# Create a stack from raster list
-patch_size_stack <- rast(stack)
-
+# # Get a list of all .rds files in the folder
+# raster_files <- list.files(paste0("data/processed/disturbances/patch_size/", folder,"/years_patch/"), all.files =TRUE, full.names = TRUE)
+# # Remove the first two paths
+# raster_files <- raster_files[-c(1, 2)]
+# 
+# # Read all rasters and stack them
+# stack <- lapply(raster_files, terra::rast)
+# 
+# # Create a stack from raster list
+# patch_size_stack <- rast(stack)
+# 
 
 # Get a list of all .rds files in the folder
 raster_files <- list.files(paste0("data/processed/disturbances/patch_size/", folder,"/years_n/"), all.files =TRUE, full.names = TRUE)
@@ -153,13 +154,13 @@ names(patch_n_stack) <- as.character(years)
 
 # separate patch_size_stack layer into set aside/reserve and managed
 
-setaside <- vect( "data/processed/setaside_forest_sites/all_setaside_forest_sites/setaside_forest.gpkg")
-
-Research_patch_size_stack <- crop(mask(patch_size_stack, setaside), setaside)
-Control_patch_size_stack <- terra::mask(patch_size_stack, setaside, inverse = TRUE)
-
-writeRaster(Research_patch_size_stack, paste0("data/processed/disturbances/patch_size/", folder,"/patch_size_stack_reserach.tif"))
-writeRaster(Control_patch_size_stack, paste0("data/processed/disturbances/patch_size/", folder,"/patch_size_stack_control.tif"))
+# setaside <- vect( "data/processed/setaside_forest_sites/all_setaside_forest_sites/setaside_forest.gpkg")
+# 
+# Research_patch_size_stack <- crop(mask(patch_size_stack, setaside), setaside)
+# Control_patch_size_stack <- terra::mask(patch_size_stack, setaside, inverse = TRUE)
+# 
+# writeRaster(Research_patch_size_stack, paste0("data/processed/disturbances/patch_size/", folder,"/patch_size_stack_reserach.tif"))
+# writeRaster(Control_patch_size_stack, paste0("data/processed/disturbances/patch_size/", folder,"/patch_size_stack_control.tif"))
 
 Research_patch_n_stack <- crop(mask(patch_n_stack, setaside), setaside)
 Control_patch_n_stack <- terra::mask(patch_n_stack, setaside, inverse = TRUE)

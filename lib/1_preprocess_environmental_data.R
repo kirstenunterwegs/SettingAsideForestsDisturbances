@@ -104,13 +104,11 @@ fcover<- rast("data/processed/forestcover/forestcover.reclass.tif")
 dem <- rast("data/processed/dem/dem30.tif")
 slope <- rast("data/processed/dem/slope30.tif")
 north.west <- rast("data/processed/dem/north.west.tif")
-ftype <- rast("data/processed/forest_type/reclassification/germany/forest.type.8.germany.30_covercrop.tif") 
 
 # --- mask environmental data to forest cover for comparability
 
 dem.fcover <- crop(mask(dem, fcover), fcover)
 slope.fcover <- crop(mask(slope, fcover), fcover)
-tri.fcover <- crop(mask(tri, fcover), fcover)
 ftype.fcover <- crop(mask(ftype, fcover), fcover)
 sitecond.fcover <- crop(mask(sitecondition, fcover), fcover)
 north.west.fcover <- crop(mask(north.west, fcover), fcover)
@@ -118,28 +116,22 @@ north.west.fcover <- crop(mask(north.west, fcover), fcover)
 
 # -- crop to setaside forest sites
 
-dem.nat <- crop(mask(dem.fcover, setaside), setaside)
-slope.nat <- crop(mask(slope.fcover, setaside), setaside)
-tri.nat <- crop(mask(tri.fcover, setaside), setaside)
-ftype.nat <- crop(mask(ftype.fcover, setaside), setaside)
-sitecond.nat <- crop(mask(sitecond.fcover, setaside), setaside)
-fcover.nat <- crop(mask(fcover, setaside), setaside)
-north.west.nat <- crop(mask(north.west.fcover, setaside), setaside)
+dem.setaside <- crop(mask(dem.fcover, setaside), setaside)
+slope.setaside <- crop(mask(slope.fcover, setaside), setaside)
+sitecond.setaside <- crop(mask(sitecond.fcover, setaside), setaside)
+fcover.setaside <- crop(mask(fcover, setaside), setaside)
+north.west.setaside <- crop(mask(north.west.fcover, setaside), setaside)
 
-writeRaster(dem.nat, "data/processed/dem/dem.setaside.tif", overwrite=T)
-writeRaster(slope.nat, "data/processed/dem/slope.setaside.tif", overwrite=T)
-writeRaster(tri.nat, "data/processed/dem/tri.setaside.tif", overwrite=T)
-writeRaster(ftype.nat, "data/processed/forest_type/ftype.setaside.tif", overwrite=T)
-writeRaster(sitecond.nat, "data/processed/site_cond/sitecond.setaside.tif", overwrite=T)
-writeRaster(fcover.nat, "data/processed/forestcover/fcover.setaside.tif", overwrite=T)
-writeRaster(north.west.nat, "data/processed/dem/north.west.setaside.tif", overwrite=T)
+writeRaster(dem.setaside, "data/processed/dem/dem.setaside.tif", overwrite=T)
+writeRaster(slope.setaside, "data/processed/dem/slope.setaside.tif", overwrite=T)
+writeRaster(sitecond.setaside, "data/processed/site_cond/sitecond.setaside.tif", overwrite=T)
+writeRaster(fcover.setaside, "data/processed/forestcover/fcover.setaside.tif", overwrite=T)
+writeRaster(north.west.setaside, "data/processed/dem/north.west.setaside.tif", overwrite=T)
 
 # -- crop to control areas (aka managed forests)
 
 dem.control <- mask(dem.fcover, setaside, inverse=TRUE)
 slope.control <- mask(slope.fcover, setaside, inverse=TRUE)
-tri.control <- mask(tri.fcover, setaside, inverse=TRUE)
-ftype.control <- mask(ftype.fcover, setaside, inverse=TRUE)
 sitecond.control <- mask(sitecond.fcover, setaside, inverse=TRUE)
 fcover.control <-  mask(fcover, setaside, inverse=TRUE)
 north.west.control <-  mask(north.west.fcover, setaside, inverse=TRUE)
@@ -148,8 +140,6 @@ north.west.control <-  mask(north.west.fcover, setaside, inverse=TRUE)
 
 dem.control <- mask(dem.control, NPs, inverse=TRUE)
 slope.control <- mask(slope.control, NPs, inverse=TRUE)
-tri.control <- mask(tri.control, NPs, inverse=TRUE)
-ftype.control <- mask(ftype.control, NPs, inverse=TRUE)
 sitecond.control <- mask(sitecond.control, NPs, inverse=TRUE)
 fcover.control <-  mask(fcover.control, NPs, inverse=TRUE)
 north.west.control <-  mask(north.west.control, NPs, inverse=TRUE)
@@ -157,8 +147,6 @@ north.west.control <-  mask(north.west.control, NPs, inverse=TRUE)
 
 writeRaster(dem.control, "data/processed/dem/dem.control.tif", overwrite=T)
 writeRaster(slope.control, "data/processed/dem/slope.control.tif", overwrite=T)
-writeRaster(tri.control, "data/processed/dem/tri.control.tif", overwrite=T)
-writeRaster(ftype.control, "data/processed/forest_type/ftype.control.tif", overwrite=T)
 writeRaster(sitecond.control, "data/processed/site_cond/sitecond.control.tif", overwrite=T)
 writeRaster(fcover.control, "data/processed/forestcover/fcover.control.tif", overwrite=T)
 writeRaster(north.west.control, "data/processed/dem/north.west.control.tif", overwrite=T)
@@ -183,7 +171,7 @@ dist.harvest <- dist.agents == 3 # harvest
 dist.natural <- dist.agents == 1 # barkbeetle/Windthrow (2 = fire, only in Brandenburg, which is not included in our study)
 
 
-writeRaster(dist.harvest, "data/processed/disturbances/germany/disturbance_harvest.tif", overwrite=T)
+#writeRaster(dist.harvest, "data/processed/disturbances/germany/disturbance_harvest.tif", overwrite=T)
 writeRaster(dist.natural, "data/processed/disturbances/germany/disturbance_natural.tif", overwrite=T)
 
 # - mask disturbance year map with agent map, to get dist year for natural disturbances only
@@ -205,9 +193,9 @@ severity <- rast("data/raw/disturbances/germany/disturbance_severity_germany_258
 
 high.severity <- severity >= 0.8
 
-# different threshold for sensitivity analysis
+# different threshold for sensitivity analysis - if you want to reproduce this analysis, you need to create the layers
 #high.severity <- severity >= 0.7
-high.severity <- severity >= 0.9
+#high.severity <- severity >= 0.9
 
 
 names(high.severity) <- "high.severity"

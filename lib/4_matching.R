@@ -280,7 +280,7 @@ My_Theme = theme( # plotting theme
   #legend.position="top")
 
 
-tiff("data/results/plots/distribution_matching_1o1.tiff", units="in", width=18, height=10, res=300)
+tiff("data/results/plots/distribution_matching_1o1f.tiff", units="in", width=18, height=10, res=300)
 # Plot density curves for each variable, faceted by Research (0,1)
 ggplot(gathered_data, aes(x = value, fill = factor(Research))) +
   geom_density(alpha = 0.6) +
@@ -292,7 +292,7 @@ ggplot(gathered_data, aes(x = value, fill = factor(Research))) +
   My_Theme
 dev.off()
 
-tiff("data/results/plots/boxplot_matching_1o1.tiff", units="in", width=18, height=10, res=300)
+tiff("data/results/plots/boxplot_matching_1o1f.tiff", units="in", width=18, height=10, res=300)
 ggplot(gathered_data, aes(x = value, y = Research, fill = factor(Research))) +
   geom_violin() +
   geom_boxplot(width = 0.2, color = "black", outlier.shape = NA) +  # Add boxplots with white outline

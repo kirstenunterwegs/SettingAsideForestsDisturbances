@@ -56,8 +56,8 @@ Control_disturbance_stack <- terra::mask(disturbance_stack, setaside, inverse = 
 
 rm(disturbance_stack, forest.cover, disturbance.year.map, high.severity.map, site_raster) # clear RAM
 
-writeRaster(Research_disturbance_stack, "data/processed/disturbances/dist_stack_managed_unmanaged/research_stack_nat.agent.tif")
-writeRaster(Control_disturbance_stack, "data/processed/disturbances/dist_stack_managed_unmanaged/control_stack_nat.agent.tif")
+writeRaster(Research_disturbance_stack, "data/processed/disturbances/dist_stack_managed_setaside/research_stack_nat.agent.tif")
+writeRaster(Control_disturbance_stack, "data/processed/disturbances/dist_stack_managed_setaside/control_stack_nat.agent.tif")
 
 
 
@@ -72,8 +72,8 @@ folder <- "1o1_forest" # change folder to respective matching setup, for which I
 
 # load disturbance information stacks
 
-Research_disturbance_stack <- rast("data/processed/disturbances/dist_stack_managed_unmanaged/research_stack_nat.agent.tif")
-Control_disturbance_stack <- rast("data/processed/disturbances/dist_stack_managed_unmanaged/control_stack_nat.agent.tif")
+#Research_disturbance_stack <- rast("data/processed/disturbances/dist_stack_managed_unmanaged/research_stack_nat.agent.tif")
+#Control_disturbance_stack <- rast("data/processed/disturbances/dist_stack_managed_unmanaged/control_stack_nat.agent.tif")
 
 
 # load patch id information for disturbance information extraction

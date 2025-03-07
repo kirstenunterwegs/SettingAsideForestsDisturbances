@@ -153,5 +153,21 @@ foresttype.30[notype == 1  & is.na(foresttype.30) ] <- 8
 # delete forest type cells which are not covered by forest cover
 foresttype.30[is.na(forestcover)] <- NA
 
-writeRaster(foresttype.30, "processed/forest_type/reclassification/germany/forest.type.8.germany.30_covercrop.tif", overwrite=TRUE)
+writeRaster(foresttype.30, "processed/forest_type/reclassification/forest.type.8.germany.30_covercrop.tif", overwrite=TRUE)
+
+
+# ---- crop to setaside and control(managed) areas 
+setaside<- vect( "data/processed/setaside_forest_sites/all_setaside_forest_sites/setaside_forest.gpkg")
+NPs <- vect("data/processed/setaside_forest_sites/NPs_Germany/NPs_Germany_25832.gpkg") # all national parks in Germany
+
+
+ftype.setaside <- crop(mask(foresttype.30, setaside), setaside)
+writeRaster(ftype.setaside, "data/processed/forest_type/ftype.setaside.tif", overwrite=T)
+
+ftype.control <- mask(ftype.fcover, setaside, inverse=TRUE)
+ftype.control <- mask(ftype.control, NPs, inverse=TRUE)
+writeRaster(ftype.control, "data/processed/forest_type/ftype.control.tif", overwrite=T)
+
+
+
 

@@ -48,7 +48,7 @@ landscapes$has_disturbance <- n_dist_pixel[, 2]
 landscapes_sub <- landscapes[landscapes$subclass %in% unique(landscapes$subclass[
   landscapes$has_disturbance >= 1]), ]
 
-writeVector(landscapes_sub, "data/processed/landscapes/1o1_forest/landscapes_disturbed.gpkg", overwrite=T)
+writeVector(landscapes_sub, "data/processed/detection_accuracy/landscapes_disturbed.gpkg", overwrite=T)
 
 
 # --- create stratification raster
@@ -111,16 +111,15 @@ strata_raster_final <- classify(strata_raster, reclass_matrix, others = NA, incl
 
 strata_raster_final <- ifel(!is.na(strata_raster_set_aside), strata_raster_set_aside, strata_raster_final)
 
-#writeRaster(strata_raster_final, "data/processed/detection_accuracy/strata_raster_final.tif" )
-strata_raster_final <- rast("data/processed/detection_accuracy/strata_raster_final.tif")
+writeRaster(strata_raster_final, "data/processed/detection_accuracy/strata_raster_final.tif" )
+#strata_raster_final <- rast("data/processed/detection_accuracy/strata_raster_final.tif")
 
 
 # -- convert stratification raster to df for sample draw
 
 raster_points <- as.data.frame(strata_raster_final, xy = TRUE, na.rm = TRUE)
 saveRDS(raster_points, "data/processed/detection_accuracy/strata_points.rds")
-
-raster_points <- readRDS("data/processed/detection_accuracy/strata_points.rds")
+#raster_points <- readRDS("data/processed/detection_accuracy/strata_points.rds")
 
 # draw samples 
 
@@ -160,13 +159,7 @@ writeVector(sampled_points_vect, "data/processed/detection_accuracy/sampled_poin
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # load labeled data back into work space:
-
-# merge both samples, but before change id of trial samples, so it follows up to big sample (change notes accordingly!)
-sampled_points_trial <- vect("data/processed/detection_accuracy/sample_points_trial_clean.shp")
-sampled_points <- vect("data/processed/detection_accuracy/sampled_points.shp")
-
-sample_points <- rbind(sampled_points_trial, sampled_points)
-
+sampled_points <- vect("processed/detection_accuracy/sampled_points_recorded.gpkg")
 
 # extract stratum
 
