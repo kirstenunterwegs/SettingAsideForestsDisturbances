@@ -3,7 +3,7 @@ This repository holds code for running the analysis that compares disturbance re
 
 Krüger, K., Senf, C., Hagge, J., Seidl, R. (2025). Setting Aside Areas for Conservation Does Not Increase Disturbances in Temperate Forests. Journal of Applied Ecology.
 
-The data required to reproduce the analysis can be obtained via the following link: (link)
+The data required to reproduce the analysis can be obtained via the following link: [(link)](https://zenodo.org/records/14990256)
 
 All data needed to reproduce the results are available. All other layers can be generated with the code provided in this repository. The vector files delineating set-aside forest areas can only be partially made available due to data usage agreements with the respective regional authorities. For reproducibility, please request the respective layers from the regional authorities, while we provide links to those that are openly accessible.
 
