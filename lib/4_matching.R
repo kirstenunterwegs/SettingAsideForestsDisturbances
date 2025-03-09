@@ -3,7 +3,7 @@
 # Matching landscapes
 # Finding for the selected set aside landscape the most similar managed forest landscape
 #
-#(1) Create the search data frame which goes into the matchit function
+#(1) Create the search data frame, which goes into the matchit function
 #(2) Find matching landscapes (1:1 and 1:Many)
 #(3) Filter in 1:Many matches the distance between multiple landscape matches to   
 #    ensure minimal overlap
@@ -149,9 +149,6 @@ matches.final <- subset(match.points, match.points$Research == 1) # set aside (1
 
 n=10 # n samples
 
-# i=99
-# o <- as.data.frame(match.points) %>% group_by(subclass) %>% count()
-# trial_sequence <- c(130:270)
 
 for (i in unique(match.points$subclass) ) { 
   
@@ -213,7 +210,7 @@ names(matches.subclass) <- c("number.matches", "number of sublandscapes")
             # 10                        10
 # often we do not find 10 landscape with some distance to themselves which are sufficiently similar to the set aside landscape
 
-saveRDS(matches.final.df, "data/processed/matching/match.df.1oMany_15perc_n30_filtered.rds") # store in match setup folder for disturbance extraction
+saveRDS(matches.final.df, "data/processed/matching/match.df.1oMany_15perc_n30_filtered.rds") 
 
 
 

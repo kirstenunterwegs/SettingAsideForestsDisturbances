@@ -1,6 +1,6 @@
 ####################################################
 #
-# aggreagating the german tree species map from Blickendörfer et al.2023
+# Aggreagating the German tree species map from Blickensdörfer et al.2024
 # to get a higher level forest type map
 #
 ####################################################

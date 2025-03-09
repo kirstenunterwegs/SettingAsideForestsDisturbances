@@ -248,7 +248,7 @@ export_df <- export_df %>%
   group_by(subclass) %>%
   mutate(fcover = fcover[which(Research == 1)[1]]) # to deal with pseudo replication in 1:Many sampling design of set aside sublandscapes
 
-# decide on neighboorhood-matrix size depending on forestcover in Reserach site, to guarantee max. 2 ha difference
+# decide on neighborhood-matrix size depending on forestcover in Research site, to guarantee max. 2 ha difference
 export_df$window <- ifelse(export_df$Research == 0 & export_df$fcover > 242 & export_df$fcover < 270, 16,
                                                 ifelse(export_df$Research == 0 & export_df$fcover > 270, 17,
                                                   ifelse(export_df$Research == 0 & export_df$fcover <= 242, 15, export_df$window)))

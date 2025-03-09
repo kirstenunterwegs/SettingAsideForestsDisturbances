@@ -159,7 +159,7 @@ writeVector(sampled_points_vect, "data/processed/detection_accuracy/sampled_poin
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # load labeled data back into work space:
-sampled_points <- vect("processed/detection_accuracy/sampled_points_recorded.gpkg")
+sampled_points <- vect("processed/detection_accuracy/sampled_points.shp")
 
 # extract stratum
 

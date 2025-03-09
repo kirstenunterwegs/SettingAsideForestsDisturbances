@@ -51,7 +51,7 @@ mean(area_table$area_ha) # mean 435,876 ha
 # create 30m res raster out of site conditions 
 
 res <-  res(fcover)
-extent <- ext(fcover) #change sitecondition_merged to forest cover
+extent <- ext(fcover) 
 crs <- crs(fcover)
 raster <- rast(extent=extent, resolution=res, crs=crs)
 site.r <- rasterize(sitecondition_merged, raster, "wg_bu")

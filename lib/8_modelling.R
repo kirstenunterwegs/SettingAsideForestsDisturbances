@@ -655,14 +655,6 @@ effect_size_df <- data.frame(
 )
 
 
-My_Theme = theme(
-  axis.title.x = element_text(size = 50),
-  axis.text.x = element_text(size = 50),
-  axis.text.y = element_text(size = 50),
-  axis.title.y = element_text(size = 60),
-  strip.text.x = element_text(size = 50))
-
-
 dist.df_1o1f_long <- dist.df_1o1f_long %>%
   mutate(Research = recode(Research, '0' = "Managed", '1' = "Set-aside"))
 dist.df_1o1f_long$Research <- as.factor(dist.df_1o1f_long$Research)
@@ -724,25 +716,11 @@ effect_size_df <- data.frame(
 )
 
 
-My_Theme = theme(
-  axis.title.x = element_text(size = 50),
-  axis.text.x = element_text(size = 50),
-  axis.text.y = element_text(size = 50),
-  axis.title.y = element_text(size = 50),
-  strip.text.x = element_text(size = 50))
-
-
 dist.df_1o1f_long.sub <- dist.df_1o1f_long.sub %>%
   mutate(Research = recode(Research, '0' = "Managed", '1' = "Set-aside"))
 dist.df_1o1f_long.sub$Research <- as.factor(dist.df_1o1f_long.sub$Research)
 dist.df_1o1f_long.sub$Research <- factor(dist.df_1o1f_long.sub$Research, levels = rev(levels(dist.df_1o1f_long.sub$Research)))
 
-My_Theme = theme( 
-  axis.title.x = element_blank(),
-  axis.text.x = element_blank(),
-  axis.text.y = element_text(size = 25),
-  axis.title.y = element_text(size = 30),
-  strip.text.x = element_text(size = 25))
 
 # Plot
 pfreq <- ggplot(dist.df_1o1f_long.sub, aes(x=Research, y=frequency, fill=Research)) +
@@ -787,13 +765,6 @@ effect_size_df <- data.frame(
   upper = c(upper_intercept, upper_research)
 )
 
-
-My_Theme = theme( 
-  axis.title.x = element_blank(),
-  axis.text.x = element_blank(),
-  axis.text.y = element_text(size = 25),
-  axis.title.y = element_text(size = 30),
-  strip.text.x = element_text(size = 25))
 
 # Plot
 pdens <- ggplot(dist.df_1o1f_long.sub, aes(x=Research, y=density, fill=Research)) +
@@ -846,13 +817,6 @@ dist.df_1o1f_long.sub.dist$Research <- as.factor(dist.df_1o1f_long.sub.dist$Rese
 dist.df_1o1f_long.sub.dist$Research <- factor(dist.df_1o1f_long.sub.dist$Research, levels = rev(levels(dist.df_1o1f_long.sub.dist$Research)))
 
 
-My_Theme = theme( # for Poster plot
-  axis.title.x = element_blank(),
-  axis.text.x = element_blank(),
-  axis.text.y = element_text(size = 25),
-  axis.title.y = element_text(size = 30),
-  strip.text.x = element_text(size = 25))
-
 # Plot
 psize <- ggplot(dist.df_1o1f_long.sub.dist, aes(x=Research, y=mean.patch, fill=Research)) + #max.patch
   geom_violin() + 
@@ -899,13 +863,6 @@ dist.df_1o1f_long.sub.dist <- dist.df_1o1f_long.sub.dist %>%
   mutate(Research = recode(Research, '0' = "Managed", '1' = "Set-aside"),
          high.severity.rate.perc = high.severity.rate * 100)
 
-
-My_Theme = theme(
-  axis.title.x = element_blank(),
-  axis.text.x = element_blank(),
-  axis.text.y = element_text(size = 25),
-  axis.title.y = element_text(size = 30),
-  strip.text.x = element_text(size = 25))
 
 # Plot
 psev <- ggplot(dist.df_1o1f_long.sub.dist, aes(x=Research, y=high.severity.rate.perc, fill=Research)) +
@@ -1135,11 +1092,7 @@ My_Theme = theme(
   legend.box.margin = margin(t = 10, r = 10, b = 10, l = 10))
 
 
-# Reshape original data for ggplot2
-dist.df_long <- dist.df_1o1f_long %>%
-  pivot_longer(cols = c(ftype2, ftype3, ftype4, ftype5, ftype6, ftype7), 
-               names_to = "group", 
-               values_to = "value")
+
 
 # Reshape data for rugs in plot
 dist.df_long <- dist.df_1o1f_long %>%

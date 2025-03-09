@@ -568,10 +568,10 @@ writeRaster(setaside_n.fcover, "data/processed/focal/setaside_n.fcover_focal.tif
 
 
 
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# use focal window per set aside forest to aggregate environmental information 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# use focal window per set aside forest area to aggregate environmental information 
 # with focal window for all possible landscapes
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 # --- elevation
 
@@ -1193,10 +1193,10 @@ sample.candidats <- sample.points
 window.df <- readRDS("data/processed/focal/window.df.rds") # window of landscape per reserve to capture enough forest area within landscape
 sample.candidats <- merge(sample.candidats, window.df, by.x="reserve",by.y="newID", all.x=TRUE)
 
+
+
 # loop through each reserve/set aside forest area and sample depending on the size of this area n amounts of landscape (n progressive increase with reserve size)
 # using "subsample.distance" function from the spatial eco package to randomly draw samples with minimum distance within each area
-
-
 
 for (i in unique(sample.candidats$reserve)) {
   
@@ -1449,15 +1449,12 @@ samples <- vect("data/processed/setaside_forest_sites/sublandscapes_setaside/sam
 new.samples <- vect("data/processed/setaside_forest_sites/sublandscapes_setaside/samples_manual.gpkg")
 
 # identify reserves where I manually collected new samples
-
 reserve.no <- unique(new.samples$reserve)
 
 # delete those samples in reserves in the "original/first" samples object
-
 samples.sub <- samples[!(samples$reserve %in% reserve.no),]
 
 # merge the new.samples object with the original one
-
 samples <- rbind(samples.sub, new.samples)
 
 

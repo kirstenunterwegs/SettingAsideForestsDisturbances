@@ -68,7 +68,6 @@ npv.managed <- mask(npv.forest, wuchsgebiete)
 npv.managed <- mask(npv.managed, setaside_forest.r, inverse=TRUE) 
 npv.managed <- mask(npv.managed, nps.r, inverse=TRUE) # mask out National Parks 
 
-#writeRaster(npv.managed, "data/processed/npv/npv.managed.tiff")
 writeRaster(npv.managed, "data/processed/npv/npv.managed_sub.tiff") # those masked to siteconditions represented
 
 # compare NPV shares for managed and setaside forests
