@@ -46,19 +46,19 @@ matches <- c("1o1_forest", "1oMany_forest")
 
 
 for (i in matches) {
-
+  
   # load matching df
   dist.df <-readRDS(paste0("data/processed/dist.extraction/",i,"/match.df_climate_dist.rds"))
-
+  
   # process the dataframe:
-
+  
   filtered_data <- dist.df %>%
-
+    
     # create column with number of not disturbed cells
     mutate(across(.cols = paste0("disturbed.cells.", years),
                   ~ n.fcover - .,  # substract disturbed cells from all forested cells in landscape to get not disturbed cells
                   .names = "no.{.col}")) %>%
-
+    
     # calculate high severity rate
     rowwise() %>%
     mutate(
@@ -68,14 +68,14 @@ for (i in matches) {
       high.severity.rate = total_high_severity / total_disturbed_cells,
     ) %>%
     ungroup()  # Important to remove the row wise grouping after operations
-
-
-   # Filter the dataframe to include only the desired columns, depending on matching scheme
-      filtered_data <- filtered_data %>% select(paste0("disturbed.cells.", years), paste0("no.disturbed.cells.", years),
-           high.severity.rate, density, frequency, max.patch, mean.patch,
-           Research, subclass, n.fcover, sitecond, ftype1:ftype8)
-
-
+  
+  
+  # Filter the dataframe to include only the desired columns, depending on matching scheme
+  filtered_data <- filtered_data %>% select(paste0("disturbed.cells.", years), paste0("no.disturbed.cells.", years),
+                                            high.severity.rate, density, frequency, max.patch, mean.patch,
+                                            Research, subclass, n.fcover, sitecond, ftype1:ftype8)
+  
+  
   # First, gather the disturbed.cells columns
   gathered_disturbed <- filtered_data %>%
     pivot_longer(
@@ -85,7 +85,7 @@ for (i in matches) {
       values_to = "dist.cells"
     ) %>%
     select(-starts_with("no.disturbed.cells."))
-
+  
   # Then, gather the no.disturbed.cells columns
   gathered_no_disturbed <- filtered_data %>%
     pivot_longer(
@@ -95,21 +95,21 @@ for (i in matches) {
       values_to = "no.dist"
     ) %>%
     select(-starts_with("disturbed.cells."))
-
+  
   # combine both
   gathered_data_long <- gathered_disturbed
   gathered_data_long$no.dist <-  gathered_no_disturbed$no.dist
-
-
+  
+  
   # add pulse year information
   gathered_data_long <- merge(gathered_data_long, dist_year_class[ , c("class", "value")],
-                             by.x= "year", by.y="value", all.x=T)
+                              by.x= "year", by.y="value", all.x=T)
   gathered_data_long$class <- as.factor(gathered_data_long$class)
-
-
+  
+  
   # write modelling df to file
   saveRDS(gathered_data_long, paste0("data/processed/dist.extraction/",i,"/modelling.df_long.rds"))
-
+  
 }
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,9 +168,9 @@ dist.df_1o1f_long$Research <- as.factor(dist.df_1o1f_long$Research)
 # disturbance rate
 
 betabinom_1o1f <- glmmTMB(cbind(dist.cells, no.dist) ~ 1+ Research + (1|year) + (1|subclass), 
-                  #dispformula = ~ Research, -> do I really want that?
-                  data = dist.df_1o1f_long, 
-                  family = betabinomial(link = "logit"))
+                          #dispformula = ~ Research, -> do I really want that?
+                          data = dist.df_1o1f_long, 
+                          family = betabinomial(link = "logit"))
 
 
 summary(betabinom_1o1f)
@@ -221,8 +221,8 @@ dist.df_1o1f_long.sub.dist <- subset(dist.df_1o1f_long.sub, dist.sum > 0)
 
 # calculate number severely disturbed and non-severely disturbed cells
 dist.df_1o1f_long.sub.dist <- dist.df_1o1f_long.sub.dist %>% 
-                                      mutate(dist.severe = round(dist.sum * high.severity.rate,0),
-                                      dist.no.severe = dist.sum - dist.severe)
+  mutate(dist.severe = round(dist.sum * high.severity.rate,0),
+         dist.no.severe = dist.sum - dist.severe)
 
 
 # --- set model variables ---
@@ -240,8 +240,8 @@ ggplot(model_df, aes(x=frequency)) +
 
 fit_freq <-  glmmTMB(frequency ~ 1+ Research +  (1|subclass) , 
                      ziformula = ~Research,
-                    data = model_df,
-                    family = truncated_poisson(link = "log")) 
+                     data = model_df,
+                     family = truncated_poisson(link = "log")) 
 
 
 summary(fit_freq)
@@ -255,8 +255,8 @@ ggplot(model_df, aes(x=density)) +
 
 fit_den <-  glmmTMB(density ~ 1+ Research + (1|subclass), #+ (1|sitecond)
                     ziformula = ~Research,
-                     data = model_df,
-                     family = truncated_poisson(link = "log")) 
+                    data = model_df,
+                    family = truncated_poisson(link = "log")) 
 
 
 summary(fit_den)
@@ -298,8 +298,8 @@ ggplot(model_df) +
 
 
 fit_severity <- glmmTMB(cbind(dist.severe, dist.no.severe) ~ 1+ Research + (1|subclass), #+ (1|sitecond) makes effect more pronounced
-                          data = dist.df_1o1f_long.sub.dist, 
-                          family = betabinomial(link = "logit"))
+                        data = dist.df_1o1f_long.sub.dist, 
+                        family = betabinomial(link = "logit"))
 
 summary(fit_severity)
 
@@ -406,9 +406,9 @@ write.table(result_df, "data/results/effects/model_effects_1o1f.csv",
 dist.df_1oManyf_long$Research <- as.factor(dist.df_1oManyf_long$Research)
 
 betabinom_1oManyf <- glmmTMB(cbind(dist.cells, no.dist) ~ 1+ Research + (1|year) + (1|subclass), 
-                          #dispformula = ~ Research, -> do I really want that?
-                          data = dist.df_1oManyf_long, 
-                          family = betabinomial(link = "logit"))
+                             #dispformula = ~ Research, -> do I really want that?
+                             data = dist.df_1oManyf_long, 
+                             family = betabinomial(link = "logit"))
 
 summary(betabinom_1oManyf)
 fixed_effects <- fixef(betabinom_1oManyf)
@@ -420,32 +420,32 @@ fixed_effects <- fixef(betabinom_1oManyf)
 
 dist.df_1oManyf<- readRDS("data/processed/dist.extraction/1oMany_forest/match.df_climate_dist.rds")
 
-  years <- 1986:2020
+years <- 1986:2020
+
+dist.df_1oManyf <- dist.df_1oManyf %>%
   
-  dist.df_1oManyf <- dist.df_1oManyf %>%
-
-    # create column with number of not disturbed cells
-    mutate(across(.cols = paste0("disturbed.cells.", years),
-                  ~ n.fcover - .,  # substract disturbed cells from all forested cells in landscape to get not disturbed cells
-                  .names = "no.{.col}")) %>%
-
-    # calculate high severity rate
-    rowwise() %>%
-    mutate(
-      total_disturbed_cells = sum(c_across(starts_with("disturbed.cells"))),
-      total_high_severity = sum(c_across(starts_with("severe.disturbed.cells"))),
-      #dist.rate = ((total_disturbed_cells / n.fcover) / 35), # annual disturbance rate
-      high.severity.rate = total_high_severity / total_disturbed_cells,
-    ) %>%
-    ungroup()  # Important to remove the row wise grouping after operations
-
-
-   # Filter the dataframe to include only the desired columns
+  # create column with number of not disturbed cells
+  mutate(across(.cols = paste0("disturbed.cells.", years),
+                ~ n.fcover - .,  # substract disturbed cells from all forested cells in landscape to get not disturbed cells
+                .names = "no.{.col}")) %>%
   
-  dist.df_1oManyf <- dist.df_1oManyf %>%
-    select(total_disturbed_cells, high.severity.rate, 
-           density, frequency, max.patch, mean.patch,
-           Research, subclass)
+  # calculate high severity rate
+  rowwise() %>%
+  mutate(
+    total_disturbed_cells = sum(c_across(starts_with("disturbed.cells"))),
+    total_high_severity = sum(c_across(starts_with("severe.disturbed.cells"))),
+    #dist.rate = ((total_disturbed_cells / n.fcover) / 35), # annual disturbance rate
+    high.severity.rate = total_high_severity / total_disturbed_cells,
+  ) %>%
+  ungroup()  # Important to remove the row wise grouping after operations
+
+
+# Filter the dataframe to include only the desired columns
+
+dist.df_1oManyf <- dist.df_1oManyf %>%
+  select(total_disturbed_cells, high.severity.rate, 
+         density, frequency, max.patch, mean.patch,
+         Research, subclass)
 
 
 # subset df to one row per landscape (excluding year specific disturbance information)
@@ -960,13 +960,16 @@ final_plot <- plot_grid(legend, combined_plot, ncol = 1, rel_heights = c(0.1, 1)
 
 
 # Save the final plot
-ggsave("data/results/plots/dist_metrics_observations_model.estimates_significance.tiff", final_plot, width = 20, height = 6,limitsize = FALSE,  dpi = 300) 
-ggsave("data/results/plots/dist_metrics_observations_model.estimates_significance.png", final_plot, width = 20, height = 6,limitsize = FALSE,  dpi = 300) 
+ggsave("data/results/plots/dist_metrics_observations_model.estimates_significance.tiff", final_plot, width = 20, height = 6,limitsize = FALSE,  dpi = 700) 
+
+ggsave("data/results/plots/dist_metrics_observations_model.estimates_significance.pdf", final_plot, width = 20, height = 6,limitsize = FALSE,  dpi = 700) 
 
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # --- (3)--- model effect direction of forest type shares on disturbance rates ---
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+################## explore shares of other species in combination with spruce
 
 
 
@@ -1062,12 +1065,11 @@ pred_data$year <- sample(1986:2020, size = nrow(pred_data), replace = TRUE)
 pred_data$subclass <- sample(1:314, size = nrow(pred_data), replace = TRUE)
 
 
-# Replace 'fit1.2' with your model object
+# predict
 pred_data$predicted <- predict(fit_all, newdata = pred_data, re.form = NULL, type = "response")
 
 
 # aggregate the predictions for plotting:
-
 agg_predictions <- pred_data %>%
   group_by(ftype1, ftype2,  ftype5, ftype6, ftype7, Research) %>%
   summarize(
@@ -1133,6 +1135,20 @@ My_Theme = theme(
   legend.box.margin = margin(t = 10, r = 10, b = 10, l = 10))
 
 
+# Reshape original data for ggplot2
+dist.df_long <- dist.df_1o1f_long %>%
+  pivot_longer(cols = c(ftype2, ftype3, ftype4, ftype5, ftype6, ftype7), 
+               names_to = "group", 
+               values_to = "value")
+
+# Reshape data for rugs in plot
+dist.df_long <- dist.df_1o1f_long %>%
+  pivot_longer(cols = c(ftype1,ftype2, ftype3, ftype4, ftype5, ftype6, ftype7), 
+               names_to = "group", 
+               values_to = "value")
+
+
+
 # prepare original data points for the rugs
 dist.df_long_sub <- dist.df_long %>%
   mutate(
@@ -1191,8 +1207,8 @@ ftype_dist<-  ggplot(agg_predictions, aes(x = ftype, y = avg_mean_predicted, col
 ftype_dist
 
 
-ggsave("results/plots/ftype_dist_simulations.tiff", ftype_dist, width = 15, height = 13, dpi = 200)
-ggsave("results/plots/ftype_dist_simulations.png", ftype_dist, width = 15, height = 13, dpi = 150)
+ggsave("results/plots/ftype_dist_simulations.tiff", ftype_dist, width = 18, height = 13, dpi = 300)
+ggsave("results/plots/ftype_dist_simulations.pdf", ftype_dist, width = 18, height = 13, dpi = 800)
 
 
 ################################################################################
@@ -1202,8 +1218,8 @@ ggsave("results/plots/ftype_dist_simulations.png", ftype_dist, width = 15, heigh
 #dist.df_1o1f_long$Research <- as.factor(dist.df_1o1f_long$Research)
 
 betabinom_1o1f.class <- glmmTMB(cbind(dist.cells, no.dist) ~ 1+ Research*class + (1|year) + (1|subclass), 
-                          data = dist.df_1o1f_long, 
-                          family = betabinomial(link = "logit"))
+                                data = dist.df_1o1f_long, 
+                                family = betabinomial(link = "logit"))
 
 summary(betabinom_1o1f.class)
 
@@ -1380,7 +1396,8 @@ combined_plot <- plot_grid(plot_time, p1,
 combined_plot
 
 # Save the final plot
-ggsave("data/results/plots/pulse_years_obs_prediction4.tiff", combined_plot, width = 20, height = 7.5) # Adjust dimensions as needed
+#ggsave("data/results/plots/pulse_years_obs_prediction.tiff", combined_plot, width = 20, height = 7.5) 
+ggsave("data/results/plots/pulse_years_obs_prediction.pdf", combined_plot, width = 20, height = 7.5, dpi = 600) 
 
 
 
@@ -1472,8 +1489,8 @@ ggsave("data/processed/modelling/intercepts.ecoregion.tiff", intercepts_eco , wi
 #################################################################################
 
 betabinom_1o1f.site <- glmmTMB(cbind(dist.cells, no.dist) ~ 1+ Research + (1|year) + (1|subclass) + (1|sitecond), 
-                          data = dist.df_1o1f_long, 
-                          family = betabinomial(link = "logit"))
+                               data = dist.df_1o1f_long, 
+                               family = betabinomial(link = "logit"))
 
 summary(betabinom_1o1f.site)
 fixed_effects <- fixef(betabinom_1o1f)
@@ -1487,8 +1504,8 @@ fixed_effects <- fixef(betabinom_1o1f)
 dist.df_1o1f_long$sitecond <- as.numeric(dist.df_1o1f_long$sitecond)
 ecoreg <- unique(dist.df_1o1f_long$sitecond)
 ecoreg_df <- data.frame(prob_research = numeric(),
-                         lower_bound = numeric(),
-                         upper_bound = numeric(),
+                        lower_bound = numeric(),
+                        upper_bound = numeric(),
                         ecoregion = numeric())
 
 
@@ -1499,9 +1516,9 @@ for (i in ecoreg) {
   dist.df.sub <- dist.df_1o1f_long[dist.df_1o1f_long$sitecond == i,] #dist.df_1oManyf_long dist.df_1o1f_long
   
   model <- glmmTMB(cbind(dist.cells, no.dist) ~ 1+ Research + (1|year) + (1|subclass), 
-                               data = dist.df.sub, 
-                               family = betabinomial(link = "logit"))
-
+                   data = dist.df.sub, 
+                   family = betabinomial(link = "logit"))
+  
   
   # Extracting the estimate and standard error for Research1
   estimate_research <- summary(model)$coefficients$cond["Research1", "Estimate"]
