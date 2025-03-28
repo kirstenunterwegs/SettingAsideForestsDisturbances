@@ -1,7 +1,7 @@
 # Analysing & comparing disturbances in set aside forest areas for conservation with mananged forests
 This repository holds code for running the analysis that compares disturbance regimes in set-aside forests versus comparable managed forests across Germany. For a detailed description of the purpose, methodology, and results, see the following paper:
 
-Krüger, K., Senf, C., Hagge, J., Seidl, R. (2025). Setting Aside Areas for Conservation Does Not Increase Disturbances in Temperate Forests. Journal of Applied Ecology. (https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2664.70036)
+Krüger, K., Senf, C., Hagge, J., Seidl, R. (2025). Setting Aside Areas for Conservation Does Not Increase Disturbances in Temperate Forests. Journal of Applied Ecology. (https://doi.org/10.1111/1365-2664.70036)
 
 The data required to reproduce the analysis can be obtained via the following link: https://zenodo.org/records/14990256
 
